@@ -22,20 +22,20 @@ void max_heapify(std::vector<T>& arr, int n, int i, Compare comp) {
 }
 
 template <typename T, typename Compare>
-void build_max_heap(std::vector<T>& arr, int n, Compare comp) {
+void build_max_heap(std::vector<T>& arr, int begin, int end, Compare comp) {
+    int n = end - begin + 1;
     for (int i = n / 2; i >= 0; i--)
         max_heapify(arr, n, i, comp);
 }
 
 template <typename T, typename Compare>
-void heap_sort(std::vector<T>& arr, Compare comp) {
-    int n = arr.size();
-    if (n < 2)
+void heap_sort(std::vector<T>& arr, int begin, int end, Compare comp) {
+    if (end - begin < 1)
         return;
-    build_max_heap(arr, n, comp);
-    for (int i = n - 1; i > 0; i--) {
-        std::swap(arr[0], arr[i]);
-        max_heapify(arr, i, 0, comp);
+    build_max_heap(arr, begin, end, comp);
+    for (int i = end; i > begin; i--) {
+        std::swap(arr[begin], arr[i]);
+        max_heapify(arr, i, begin, comp);
     }
 }
 

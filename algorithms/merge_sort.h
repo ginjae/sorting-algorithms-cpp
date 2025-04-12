@@ -41,10 +41,10 @@ void merge_sort_rec(std::vector<T>& arr, int left, int right, Compare comp) {
 }
 
 template <typename T, typename Compare>
-void merge_sort(std::vector<T>& arr, Compare comp) {
-    if (arr.size() < 2)
+void merge_sort(std::vector<T>& arr, int begin, int end, Compare comp) {
+    if (end - begin < 1)
         return;
-    merge_sort_rec(arr, 0, arr.size() - 1, comp);
+    merge_sort_rec(arr, begin, end, comp);
 }
 
 #endif

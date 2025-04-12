@@ -10,6 +10,8 @@
 #include "algorithms/merge_sort.h"
 #include "algorithms/quick_sort.h"
 #include "algorithms/selection_sort.h"
+#include "algorithms/cocktail_shaker_sort.h"
+#include "algorithms/intro_sort.h"
 
 using namespace std;
 
@@ -55,7 +57,7 @@ bool pair_comp(const pair<int, char>& a, const pair<int, char>& b) {
 }
 
 template <typename T>
-using SortFunc = function<void(vector<T>&, function<bool(const T&, const T&)>)>;
+using SortFunc = function<void(vector<T>&, int, int, function<bool(const T&, const T&)>)>;
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
@@ -81,6 +83,8 @@ int main(int argc, char* argv[]) {
     SET_SORT_FUNCTION(merge_sort)
     SET_SORT_FUNCTION(quick_sort)
     SET_SORT_FUNCTION(selection_sort)
+    SET_SORT_FUNCTION(cocktail_shaker_sort)
+    SET_SORT_FUNCTION(intro_sort)
     else {
         cout << "Invalid sorting algorithm" << endl;
         return 0;
@@ -89,10 +93,10 @@ int main(int argc, char* argv[]) {
     if (dataset == "stability") {
         auto stable_answer = pair_arr;
         stable_sort(stable_answer.begin(), stable_answer.end());
-        sort_pair(pair_arr, pair_comp);
+        sort_pair(pair_arr, 0, pair_arr.size() - 1, pair_comp);
         bool is_stable = true;
         cout << "stable\t" << sorting << endl;
-        for (int i = 0; i < pair_arr.size(); i++) {
+        for (size_t i = 0; i < pair_arr.size(); i++) {
             cout << stable_answer[i].first << ", " << stable_answer[i].second << "\t"    \
                 << pair_arr[i].first << ", " << pair_arr[i].second << endl;
             if (pair_arr[i] != stable_answer[i])
@@ -111,7 +115,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < 12; i++) {
         vector<int> temp = arr;
         auto start = chrono::system_clock::now();
-        sort_int(temp, less<int>());
+        sort_int(temp, 0, temp.size() - 1, less<int>());
         chrono::duration<double> sec = chrono::system_clock::now() - start;
         cout << sec.count() << endl;
     }
