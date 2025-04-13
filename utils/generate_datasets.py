@@ -10,7 +10,7 @@ def generate_random_dataset(size):
     return data
 
 def generate_dense_random_dataset(size):
-    return [random.randint(0, 9) for _ in range(size)]
+    return [random.randint(0, 99) for _ in range(size)]
 
 def generate_ascending_dataset(size):
     return list(range(size))
