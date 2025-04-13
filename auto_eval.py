@@ -68,12 +68,12 @@ if __name__ == "__main__":
             for dataset_size in DATASET_SIZES:
                 dataset_path = "datasets/" + dataset_type + "_" + \
                     dataset_size + ".txt"
-                iterations = "12"
-
-                if dataset_size == "1000000":
-                    if sorting_algorithm == "bubble_sort" or sorting_algorithm == "cocktail_shaker_sort" \
-                    or sorting_algorithm == "insertion_sort" or sorting_algorithm == "selection_sort":
-                        iterations = "3"
+                iterations = "3"
+                # iterations = "12"
+                # if dataset_size == "1000000":
+                #     if sorting_algorithm == "bubble_sort" or sorting_algorithm == "cocktail_shaker_sort" \
+                #     or sorting_algorithm == "insertion_sort" or sorting_algorithm == "selection_sort":
+                #         iterations = "3"
 
                 mem, output = evaluation(sorting_algorithm, dataset_path, iterations)
                 running_times = list(map(float, output.strip().split("\n")))
