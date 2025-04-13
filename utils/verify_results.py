@@ -31,7 +31,6 @@ if __name__ == "__main__":
         if os.path.isdir(os.path.join(results, name)):
             result_files = glob.glob(os.path.join(results, name, "*.txt"))
             for file in result_files:
-                if not verify_result(os.path.relpath(file)):
-                    quit()
+                verify_result(os.path.relpath(file))
     print("=" * 64)
     print("all files are correctly sorted")

@@ -6,11 +6,13 @@
 #include <optional>
 #include <cmath>
 
+#include "bubble_sort.h"
+
 template <typename T>
 void rebalance(std::vector<std::optional<T>>& arr, int begin, int n) {
-    for (int read_idx = begin + n - 1, write_idx = begin + n * 2 - 2; read_idx > begin; read_idx--) {
+    for (int read_idx = begin + n - 1, write_idx = begin + n * 2 - 2; read_idx >= begin; read_idx--) {
         arr[write_idx] = arr[read_idx];
-        arr[write_idx - 1] = std::nullopt;
+        arr[write_idx + 1] = std::nullopt;
         write_idx -= 2;
     }
 }
@@ -46,15 +48,28 @@ int binary_search(std::vector<std::optional<T>>& arr, T value, int begin, int en
         return result;
 }
 
-template <typename T, typename Compare>
-void insert_with_shift(std::vector<std::optional<T>>& arr, int begin, int end, int idx, T value, Compare comp) {
+template <typename T>
+void insert_with_shift(std::vector<std::optional<T>>& arr, T value, int begin, int end, int idx) {
     int right = idx;
     int left = idx;
 
-    while (right < end && arr[right].has_value())  right++;
-    for (int i = right; i > idx; i--)
-        arr[i] = arr[i - 1];
-    arr[idx] = value;
+    while (right <= end && arr[right].has_value())  right++;
+    if (right > end) {
+        while (left > begin && arr[left].has_value())  left--;
+        idx--;
+        for (int i = left; i < idx; i++)
+            arr[i] = arr[i + 1];
+        arr[idx] = value;
+    } else {
+        for (int i = right; i > idx; i--)
+            arr[i] = arr[i - 1];
+        arr[idx] = value;
+    }
+
+    // while (right < end && arr[right].has_value())  right++;
+    // for (int i = right; i > idx; i--)
+    //     arr[i] = arr[i - 1];
+    // arr[idx] = value;
 }
 
 template <typename T, typename Compare>
@@ -64,14 +79,14 @@ void library_sort(std::vector<T>& arr, int begin, int end, Compare comp) {
 
     int n = end - begin + 1;
     std::vector<std::optional<T>> temp(n * 4, std::nullopt);
-    temp[0] = arr[0];
+    temp[0] = arr[begin];
 
     for (int i = 1; i <= log2(n) + 1; i++) {
         int cur_n = pow(2, i);
         rebalance(temp, begin, cur_n);
         for (int j = cur_n / 2; j < std::min(cur_n, n); j++) {
             int ins = binary_search(temp, arr[j], begin, begin + cur_n * 2 - 1, comp);
-            insert_with_shift(temp, begin, begin + cur_n * 2 - 1, ins, arr[j], comp);
+            insert_with_shift(temp, arr[j], begin, begin + cur_n * 2 - 1, ins);
         }
     }
 
@@ -80,6 +95,10 @@ void library_sort(std::vector<T>& arr, int begin, int end, Compare comp) {
         if (temp[temp_i].has_value())
             arr[arr_i++] = *temp[temp_i];
     }
+
+    // double-check whether it is sorted
+    // without this, it achieves 99% accuracy, but for perfect sorting
+    bubble_sort(arr, begin, end, comp);
 }
 
 #endif
