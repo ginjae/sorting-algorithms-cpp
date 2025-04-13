@@ -33,7 +33,7 @@ def write_csv(data, file_path):
         for d in data:
             writer.writerow([d])
 
-def generate_all_datasets(dir_path="datasets", sizes=(1_000, 10_000, 100_000, 1_000_000)):
+def generate_all_datasets(dir_path, sizes=(1_000, 10_000, 100_000, 1_000_000)):
     random.seed(SEED)
     os.makedirs(dir_path, exist_ok=True)
 
@@ -54,4 +54,6 @@ def generate_all_datasets(dir_path="datasets", sizes=(1_000, 10_000, 100_000, 1_
         write_csv(partially_sorted_data, os.path.join(dir_path, f"partially_sorted_{size}.txt"))
 
 if __name__ == "__main__":
-    generate_all_datasets()
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    dir_path = root + "/datasets"
+    generate_all_datasets(dir_path)
