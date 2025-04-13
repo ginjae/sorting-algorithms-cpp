@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <cstdlib>
 
 template <typename T, typename Compare>
 size_t partition(std::vector<T>& arr, int begin, int end, int pivot_index, Compare comp) {

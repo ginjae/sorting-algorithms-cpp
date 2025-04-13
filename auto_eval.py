@@ -25,8 +25,8 @@ DATASET_SIZES = [
     "1000000"
 ]
 
-def evaluation(sorting_algorithm: str, dataset_path: str):
-    cmd = ["./eval", sorting_algorithm, dataset_path]
+def evaluation(sorting_algorithm: str, dataset_path: str, iterations: str):
+    cmd = ["./eval", sorting_algorithm, dataset_path, iterations]
 
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     pid = process.pid
@@ -45,6 +45,10 @@ def evaluation(sorting_algorithm: str, dataset_path: str):
 
     return peak_memory, stdout.decode()
 
+def write_and_print(file, string):
+    file.write(string)
+    print(string, end="")
+
 if __name__ == "__main__":
     subprocess.run(["make", "eval"])
 
@@ -54,22 +58,30 @@ if __name__ == "__main__":
         quit()
 
     os.makedirs("results/" + sorting_algorithm, exist_ok=True)
-    with open("results/" + sorting_algorithm + "/" + sorting_algorithm + ".txt", mode="w") as f:
-        f.write(f"Algorithm               : {sorting_algorithm}\n")
-        _, output = evaluation(sorting_algorithm, "stability")
-        f.write(output.strip())
-        f.write("\n")
+    with open("results/" + sorting_algorithm + ".txt", mode="w") as f:
+        write_and_print(f, f"Algorithm               : {sorting_algorithm}\n")
+        _, output = evaluation(sorting_algorithm, "stability", "1")
+        write_and_print(f, output.strip())
+        write_and_print(f, "\n")
         
         for dataset_type in DATASET_TYPES:
             for dataset_size in DATASET_SIZES:
                 dataset_path = "datasets/" + dataset_type + "_" + \
                     dataset_size + ".txt"
-                mem, output = evaluation(sorting_algorithm, dataset_path)
+                iterations = "12"
+
+                if dataset_size == "1000000":
+                    if sorting_algorithm == "bubble_sort" or sorting_algorithm == "cocktail_shaker_sort" \
+                    or sorting_algorithm == "insertion_sort" or sorting_algorithm == "selection_sort":
+                        iterations = "3"
+
+                mem, output = evaluation(sorting_algorithm, dataset_path, iterations)
                 running_times = list(map(float, output.strip().split("\n")))
-                f.write(f"Dataset                 : {dataset_path}\n")
-                f.write(f"Peak Memory             : {mem} bytes\n")
-                f.write(f"Average Running Time    : {sum(running_times) / len(running_times)} sec\n")
-                f.write("Raw Data:\n")
+                write_and_print(f, f"Dataset                 : {dataset_path}\n")
+                write_and_print(f, f"Peak Memory             : {mem} bytes\n")
+                write_and_print(f, f"Average Running Time    : {sum(running_times) / len(running_times)} sec\n")
+                write_and_print(f, "Raw Data:\n")
                 for running_time in running_times:
-                    f.write(f"{running_time}\n")
-                f.write("=" * 64 + "\n")
+                    write_and_print(f, f"{running_time}\n")
+                write_and_print(f, "=" * 64 + "\n")
+

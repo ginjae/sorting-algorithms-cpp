@@ -1,6 +1,6 @@
 SANFLAGS = -fsanitize=address
 CXX = g++
-CXXFLAGS = -std=c++23 $(SANFLAGS) -O2
+CXXFLAGS = -std=c++17 $(SANFLAGS) -O2
 DEPS = algorithms/bubble_sort.h algorithms/cocktail_shaker_sort.h algorithms/comb_sort.h	\
 		algorithms/heap_sort.h algorithms/insertion_sort.h algorithms/intro_sort.h	\
 		algorithms/library_sort.h algorithms/merge_sort.h algorithms/quick_sort.h	\

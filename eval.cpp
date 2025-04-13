@@ -65,12 +65,19 @@ template <typename T>
 using SortFunc = function<void(vector<T>&, int, int, function<bool(const T&, const T&)>)>;
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        cout << "Usage: eval <sorting algorithm> <dataset path>\n";
+    if (argc != 4) {
+        cout << "Usage: eval <sorting algorithm> <dataset path> <iterations>\n";
         return 0;
     }
     string sorting = argv[1];
     string dataset = argv[2];
+    int iterations;
+    try {
+        iterations = stoi(argv[3]);
+    } catch (exception& e) {
+        cout << "Usage: eval <sorting algorithm> <dataset path> <iterations>\n";
+        return 0;
+    }
 
     SortFunc<int> sort_int;
     SortFunc<pair<int, char>> sort_pair;
@@ -122,7 +129,7 @@ int main(int argc, char* argv[]) {
 
     vector<int> arr;
     load_dataset(arr, dataset);
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < iterations; i++) {
         vector<int> temp = arr;
         auto start = chrono::system_clock::now();
         sort_int(temp, 0, temp.size() - 1, less<int>());
