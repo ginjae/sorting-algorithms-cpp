@@ -20,9 +20,10 @@ size_t partition(std::vector<T>& arr, int begin, int end, int pivot_index, Compa
 template <typename T, typename Compare>
 void quick_sort_rec(std::vector<T>& arr, int begin, int end, Compare comp) {
     if (begin < end) {
-        int pivot = partition(arr, begin, end, end, comp);  // select the last element as a pivot
-        quick_sort_rec(arr, begin, pivot - 1, comp);
-        quick_sort_rec(arr, pivot + 1, end, comp);
+        int pivot_index = begin + rand() % (end - begin + 1);   // select the random element as a pivot
+        pivot_index = partition(arr, begin, end, pivot_index, comp);
+        quick_sort_rec(arr, begin, pivot_index - 1, comp);
+        quick_sort_rec(arr, pivot_index + 1, end, comp);
     }
 }
 

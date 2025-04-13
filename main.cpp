@@ -7,6 +7,10 @@
 #include "algorithms/selection_sort.h"
 #include "algorithms/cocktail_shaker_sort.h"
 #include "algorithms/intro_sort.h"
+#include "algorithms/tim_sort.h"
+#include "algorithms/comb_sort.h"
+#include "algorithms/library_sort.h"
+#include "algorithms/tournament_sort.h"
 
 using namespace std;
 
@@ -32,6 +36,9 @@ bool pair_comp(const pair<int, char>& a, const pair<int, char>& b) {
         vector<pair<int, char>> pair_arr = PAIR_ARR;    \
         x(pair_arr, 0, pair_arr.size() - 1, pair_comp); \
         for (auto& p : pair_arr)    \
+            cout << p.first;    \
+        cout << endl;   \
+        for (auto& p : pair_arr)    \
             cout << p.second;   \
         cout << endl;   \
         vector<int> empty_arr;  \
@@ -39,7 +46,7 @@ bool pair_comp(const pair<int, char>& a, const pair<int, char>& b) {
     } catch (exception& e) {    \
         cout << e.what() << endl;   \
     }   \
-    cout << "↑ " << #x << endl;
+    cout << "↑ " << #x << "\n" << endl;
 
 
 int main() {
@@ -51,6 +58,10 @@ int main() {
     SORT_TEST(selection_sort)
     SORT_TEST(cocktail_shaker_sort)
     SORT_TEST(intro_sort)
+    SORT_TEST(tim_sort)
+    SORT_TEST(comb_sort)
+    SORT_TEST(library_sort)
+    SORT_TEST(tournament_sort)
 
     return 0;
 }

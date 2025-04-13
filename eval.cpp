@@ -12,6 +12,10 @@
 #include "algorithms/selection_sort.h"
 #include "algorithms/cocktail_shaker_sort.h"
 #include "algorithms/intro_sort.h"
+#include "algorithms/tim_sort.h"
+#include "algorithms/comb_sort.h"
+#include "algorithms/library_sort.h"
+#include "algorithms/tournament_sort.h"
 
 using namespace std;
 
@@ -85,6 +89,10 @@ int main(int argc, char* argv[]) {
     SET_SORT_FUNCTION(selection_sort)
     SET_SORT_FUNCTION(cocktail_shaker_sort)
     SET_SORT_FUNCTION(intro_sort)
+    SET_SORT_FUNCTION(tim_sort)
+    SET_SORT_FUNCTION(comb_sort)
+    SET_SORT_FUNCTION(library_sort)
+    SET_SORT_FUNCTION(tournament_sort)
     else {
         cout << "Invalid sorting algorithm" << endl;
         return 0;
