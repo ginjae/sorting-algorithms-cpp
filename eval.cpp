@@ -48,11 +48,12 @@ string dataset_sizes[] = {
 
 /* To check stability in sorting algorithms */
 vector<pair<int, char>> pair_arr = {
-    {3, 'A'}, {2, 'B'}, {1, 'C'}, {2, 'D'},
-    {2, 'E'}, {3, 'F'}, {1, 'G'}, {2, 'H'},
-    {2, 'I'}, {1, 'J'}, {2, 'K'}, {2, 'L'},
-    {1, 'M'}, {2, 'N'}, {3, 'O'}, {1, 'P'},
-    {2, 'Q'}, {3, 'R'}, {3, 'S'}, {1, 'T'}
+    {1, 'S'}, {1, 't'}, {1, 'a'}, {2, 'r'},
+    {2, 't'}, {3, 'o'}, {1, 'b'}, {2, 'i'},
+    {2, 'n'}, {1, 'l'}, {2, 'g'}, {2, 'A'},
+    {1, 'e'}, {2, 'l'}, {3, 'r'}, {1, 'S'},
+    {2, 'g'}, {3, 'i'}, {3, 't'}, {1, 'o'},
+    {4, 'm'}, {3, 'h'}
 };
 
 /* To check stability in sorting algorithms */
@@ -100,24 +101,25 @@ int main(int argc, char* argv[]) {
 
     if (dataset == "stability") {
         auto stable_answer = pair_arr;
-        stable_sort(stable_answer.begin(), stable_answer.end());
+        stable_sort(stable_answer.begin(), stable_answer.end(), pair_comp);
         sort_pair(pair_arr, 0, pair_arr.size() - 1, pair_comp);
         bool is_stable = true;
-        cout << "stable\t" << sorting << endl;
+        cout << "(stability test result: ";
+        // cout << "stable\t" << sorting << endl;
         for (size_t i = 0; i < pair_arr.size(); i++) {
-            cout << stable_answer[i].first << ", " << stable_answer[i].second << "\t"    \
-                << pair_arr[i].first << ", " << pair_arr[i].second << endl;
+            // cout << stable_answer[i].first << ", " << stable_answer[i].second << "\t"    \
+            //     << pair_arr[i].first << ", " << pair_arr[i].second << endl;
+            cout << pair_arr[i].second;
             if (pair_arr[i] != stable_answer[i])
                 is_stable = false;
         }
         if (is_stable)
-            cout << sorting + " is stable" << endl;
+            cout << " -> " << sorting + " is stable)" << endl;
         else
-            cout << sorting + " is not stable" << endl;
+            cout << " -> " << sorting + " is not stable)" << endl;
         return 0;
     }
 
-    cout << "Evaluating " << sorting << ":" << endl;
     vector<int> arr;
     load_dataset(arr, dataset);
     for (int i = 0; i < 12; i++) {
@@ -125,7 +127,15 @@ int main(int argc, char* argv[]) {
         auto start = chrono::system_clock::now();
         sort_int(temp, 0, temp.size() - 1, less<int>());
         chrono::duration<double> sec = chrono::system_clock::now() - start;
+        cout << fixed;
+        cout.precision(9);
         cout << sec.count() << endl;
+        if (i == 0) {
+            ofstream outfile("results/" + sorting + "/" + dataset.substr(8, dataset.size()));
+            for (int n : temp)
+                outfile << n << endl;
+            outfile.close();
+        }
     }
 
     /*
