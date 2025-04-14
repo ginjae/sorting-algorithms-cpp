@@ -57,3 +57,4 @@ if __name__ == "__main__":
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     dir_path = root + "/datasets"
     generate_all_datasets(dir_path)
+    # generate_all_datasets(dir_path, (200_000, 300_000, 400_000, 500_000, 600_000, 700_000, 800_000, 900_000))
