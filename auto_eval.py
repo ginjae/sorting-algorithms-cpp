@@ -22,8 +22,27 @@ DATASET_SIZES = [
     "1000",
     "10000",
     "100000",
+    "200000",
+    "300000",
+    "400000",
+    "500000",
+    "600000",
+    "700000",
+    "800000",
+    "900000",
     "1000000"
 ]
+
+# DATASET_SIZES = [
+#     "200000",
+#     "300000",
+#     "400000",
+#     "500000",
+#     "600000",
+#     "700000",
+#     "800000",
+#     "900000"
+# ]
 
 def evaluation(sorting_algorithm: str, dataset_path: str, iterations: str):
     cmd = ["./eval", sorting_algorithm, dataset_path, iterations]
