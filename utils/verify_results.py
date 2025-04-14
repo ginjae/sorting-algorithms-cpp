@@ -1,36 +1,59 @@
 import os
 import glob
 
-def verify_result(file_path):
-    with open(file_path, mode='r') as f:
-        prev = None
-        line_num = 0
+DATASET_TYPES = [
+    "random",
+    "dense_random",
+    "ascending",
+    "descending",
+    "partially_sorted"
+]
 
-        for line in f:
-            line_num += 1
-            line = line.strip()
+DATASET_SIZES = [
+    "1000",
+    "10000",
+    "100000",
+    "1000000"
+]
 
-            try:
-                current = int(line)
-            except ValueError:
-                print(f"!!!!! {file_path}, line: {line_num} is not a integer !!!!!")
+def get_answer(dataset_path):
+    with open(dataset_path, mode="r") as f:
+        answer = [int(line.strip()) for line in f if line.strip()]
+        answer.sort()
+        return answer
+
+def verify_result(result_path):
+    answer = answers[os.path.basename(result_path)]
+    with open(result_path, mode='r') as f:
+        result = [int(line.strip()) for line in f if line.strip()]
+        for i in range(len(answer)):
+            if answer[i] != result[i]:
+                print("!!! " + result_path + ": line ", i + 1)
                 return False
-
-            if prev is not None and current < prev:
-                print(f"!!!!! {file_path},line: {line_num} -> incorrectly sorted !!!!!")
-                return False
-
-            prev = current
-    print(file_path + " is correctly sorted")
+        
+    print(result_path + " is correctly sorted")
     return True
 
 if __name__ == "__main__":
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    answers = dict()
+    for dataset_type in DATASET_TYPES:
+        for dataset_size in DATASET_SIZES:
+            dataset_name = dataset_type + "_" + dataset_size + ".txt"
+            dataset_path = os.path.join(root, "datasets", dataset_name)
+            answers[dataset_name] = get_answer(dataset_path)
+
     results = os.path.join(root, "results")
+    
+    total = 0
+    incorrect = 0
     for name in os.listdir(results):
         if os.path.isdir(os.path.join(results, name)):
             result_files = glob.glob(os.path.join(results, name, "*.txt"))
             for file in result_files:
-                verify_result(os.path.relpath(file))
+                total += 1
+                if not verify_result(os.path.relpath(file)):
+                    incorrect += 1
     print("=" * 64)
-    print("all files are correctly sorted")
+    print(f"total: {total}")
+    print(f"incorrect: {incorrect}")
