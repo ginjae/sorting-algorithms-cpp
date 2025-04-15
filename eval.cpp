@@ -3,6 +3,7 @@
 #include <chrono>
 #include <functional>
 #include <algorithm>
+#include <sys/resource.h>
 
 #include "algorithms/bubble_sort.h"
 #include "algorithms/heap_sort.h"
@@ -27,6 +28,12 @@ void load_dataset(vector<int>& arr, string file_path) {
         arr.push_back(stoi(line));
     }
     file.close();
+}
+
+size_t getCurrentRSS() {
+    struct rusage r_usage;
+    getrusage(RUSAGE_SELF, &r_usage);
+    return r_usage.ru_maxrss * 1024; // kilobytes to bytes
 }
 
 /*
@@ -131,9 +138,13 @@ int main(int argc, char* argv[]) {
     load_dataset(arr, dataset);
     for (int i = 0; i < iterations; i++) {
         vector<int> temp = arr;
+        // int before = getCurrentRSS();
         auto start = chrono::system_clock::now();
         sort_int(temp, 0, temp.size() - 1, less<int>());
         chrono::duration<double> sec = chrono::system_clock::now() - start;
+        // int after = getCurrentRSS();
+        // cout << before << " - " << after << endl;
+        // cout << "MEM: " << after - before << " bytes\n";
         cout << fixed;
         cout.precision(9);
         cout << sec.count() << endl;
