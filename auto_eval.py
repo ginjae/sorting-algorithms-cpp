@@ -23,13 +23,9 @@ DATASET_SIZES = [
     "10000",
     "100000",
     "200000",
-    "300000",
     "400000",
-    "500000",
     "600000",
-    "700000",
     "800000",
-    "900000",
     "1000000"
 ]
 
@@ -66,7 +62,7 @@ def evaluation(sorting_algorithm: str, dataset_path: str, iterations: str):
 
 def write_and_print(file, string):
     file.write(string)
-    print(string, end="")
+    # print(string, end="")
 
 if __name__ == "__main__":
     subprocess.run(["make", "eval"])
@@ -76,6 +72,10 @@ if __name__ == "__main__":
         print("Usage: python3 auto_eval.py <sorting algorithm>")
         quit()
 
+    mems = []
+    times = []
+    print(sorting_algorithm)
+
     os.makedirs("results/" + sorting_algorithm, exist_ok=True)
     with open("results/" + sorting_algorithm + ".txt", mode="w") as f:
         write_and_print(f, f"Algorithm               : {sorting_algorithm}\n")
@@ -84,10 +84,12 @@ if __name__ == "__main__":
         write_and_print(f, "\n")
         
         for dataset_type in DATASET_TYPES:
+            temp_mem = []
+            temp_time = []
             for dataset_size in DATASET_SIZES:
                 dataset_path = "datasets/" + dataset_type + "_" + \
                     dataset_size + ".txt"
-                iterations = "3"
+                iterations = "10"
                 # iterations = "12"
                 # if dataset_size == "1000000":
                 #     if sorting_algorithm == "bubble_sort" or sorting_algorithm == "cocktail_shaker_sort" \
@@ -96,6 +98,10 @@ if __name__ == "__main__":
 
                 mem, output = evaluation(sorting_algorithm, dataset_path, iterations)
                 running_times = list(map(float, output.strip().split("\n")))
+
+                temp_mem.append(mem)
+                temp_time.append(sum(running_times) / len(running_times))
+
                 write_and_print(f, f"Dataset                 : {dataset_path}\n")
                 write_and_print(f, f"Peak Memory             : {mem} bytes\n")
                 write_and_print(f, f"Average Running Time    : {sum(running_times) / len(running_times)} sec\n")
@@ -103,4 +109,16 @@ if __name__ == "__main__":
                 for running_time in running_times:
                     write_and_print(f, f"{running_time}\n")
                 write_and_print(f, "=" * 64 + "\n")
+            mems.append(temp_mem)
+            times.append(temp_time)
+            print("[peak memory]")
+            print(mems)
+            # for m in mems:
+            #     print(m, end=",")
+            # print()
+            print("[running time]")
+            print(times)
+            # for t in times:
+            #     print(t, end=",")
+            # print()
 
